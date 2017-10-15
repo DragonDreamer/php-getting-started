@@ -73,33 +73,32 @@ function decode_request($data) {
 
 
 function echo_content($content) {
-    error_log("echo_content:".$content);
+    //error_log("echo_content:".$content);
     echo $content;
 }
 
 
 function curl_header_function($ch, $header) {
-    global $__content__, $__content_type__;
-    error_log("header:".$header);
+    global $__content__;
 
     $pos = strpos($header, ':');
     if ($pos == false) {
         $__content__ .= $header;
-        error_log("header none");
+        //error_log("header none");
     } else {
         $key = join('-', array_map('ucfirst', explode('-', substr($header, 0, $pos))));
         $__content__ .= $key . substr($header, $pos);
-        error_log("header content:".$__content__);
+        //error_log("header content:".$__content__);
     }
     return strlen($header);
 }
 
 
 function curl_write_function($ch, $content) {
-    error_log("content:".$content);
+    //error_log("content:".$content);
     global $__content__;
     if ($__content__) {
-        error_log("echo content:".$__content__);
+        //error_log("echo content:".$__content__);
         // for debug
         // echo_content("HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\n\r\n");
         echo_content($__content__);
@@ -112,7 +111,7 @@ function curl_write_function($ch, $content) {
 
 function post() {
     list($method, $url, $headers, $body) = @decode_request(@file_get_contents('php://input'));
-    error_log("method:".$method." url:".$url." body len:".strlen($body));
+    //error_log("method:".$method." url:".$url." body len:".strlen($body));
     if ($body) {
         $headers['Content-Length'] = strval(strlen($body));
     }
