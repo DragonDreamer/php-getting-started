@@ -118,7 +118,7 @@ function curl_write_function($ch, $content) {
 
 function post() {
     list($method, $url, $headers, $body) = @decode_request(@file_get_contents('php://input'));
-    error_log("method:".$method." url:".$url." body len:".streln($body));
+    error_log("method:".$method." url:".$url." body len:".strlen($body));
     if ($body) {
         $headers['Content-Length'] = strval(strlen($body));
     }
