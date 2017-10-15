@@ -84,28 +84,26 @@ function echo_content($content) {
 
 function curl_header_function($ch, $header) {
     global $__content__, $__content_type__;
+    error_log("header:".$header);
+
     $pos = strpos($header, ':');
     if ($pos == false) {
         $__content__ .= $header;
+        error_log("header none");
     } else {
         $key = join('-', array_map('ucfirst', explode('-', substr($header, 0, $pos))));
-        if ($key != 'Transfer-Encoding') {
-            $__content__ .= $key . substr($header, $pos);
-        }
-    }
-    if (preg_match('@^Content-Type: ?(audio/|image/|video/|application/octet-stream)@i', $header)) {
-        $__content_type__ = 'image/x-png';
-    }
-    if (!trim($header)) {
-        header('Content-Type: ' . $__content_type__);
+        $__content__ .= $key . substr($header, $pos);
+        error_log("header content:".$__content__);
     }
     return strlen($header);
 }
 
 
 function curl_write_function($ch, $content) {
+    error_log("content:".$content);
     global $__content__;
     if ($__content__) {
+        error_log("echo content:".$__content__);
         // for debug
         // echo_content("HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\n\r\n");
         echo_content($__content__);
